@@ -14,8 +14,7 @@ class TwitterClient(object):
         access_token = 'XXXXXXXXXXXXXXXXXXXXxxx'
         access_token_secret = 'XXXXXXXXXXXXXXXXXXXXX'
 
-        try: 
-
+        try:
             self.auth = OAuthHandler(consumer_key, consumer_secret) 
             
             self.auth.set_access_token(access_token, access_token_secret) 
@@ -36,9 +35,8 @@ class TwitterClient(object):
         Utility function to classify sentiment of passed tweet 
         using textblob's sentiment method 
         '''
-       
         analysis = TextBlob(self.clean_tweet(tweet)) 
-       
+      
         if analysis.sentiment.polarity > 0: 
             return 'positive'
         elif analysis.sentiment.polarity == 0: 
@@ -50,30 +48,24 @@ class TwitterClient(object):
         ''' 
         Main function to fetch tweets and parse them. 
         '''
-        # empty list to store parsed tweets 
         tweets = [] 
-  
         try: 
-    
             fetched_tweets = self.api.search(q = query, count = count) 
   
             for tweet in fetched_tweets: 
                
                 parsed_tweet = {} 
-  
-                
+ 
                 parsed_tweet['text'] = tweet.text 
                 
                 parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text) 
   
-                
                 if tweet.retweet_count > 0: 
                      
                     if parsed_tweet not in tweets: 
                         tweets.append(parsed_tweet) 
                 else: 
                     tweets.append(parsed_tweet) 
-  
             return tweets 
   
         except tweepy.TweepError as e: 
